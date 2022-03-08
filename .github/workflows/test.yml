@@ -19,25 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        haproxy-versions:
-        - "1.7"
-        - "1.8"
-        - "1.9"
-        - "2.0"
-        - "2.1"
-        - "2.2"
-        - "2.3"
-        - "2.4"
-        - "2.5"
-        - "2.6"
+        vtest-versions:
+        - "b9a88f92777d97e42d908b4919f305889200f52c"
+        - "master"
     steps:
       - uses: actions/checkout@v3
       - uses: ./
-        id: install-haproxy
+        id: install-vtest
         with:
-          branch: ${{ matrix.haproxy-versions }}
-          install_vtest: true
-          use_openssl: true
-          use_lua: true
-      - name: Show full HAProxy version for ${{ steps.install-haproxy.outputs.version }}
-        run: haproxy -vv
+          branch: ${{ matrix.vtest-versions }}
+      - run: echo "Installed VTest ${{ steps.install-vtest.outputs.commit }}."

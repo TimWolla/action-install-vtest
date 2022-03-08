@@ -1,24 +1,13 @@
-name: 'Compile and install HAProxy'
-description: 'Compiles and installs HAProxy into the PATH.'
+name: 'Compile and install VTest'
+description: 'Compiles and installs VTest into the PATH.'
 author: 'Tim Düsterhus'
 inputs:
   branch:
     required: true
-    description: 'HAProxy branch to install.'
-  install_vtest:
-    default: 'false'
-    description: 'Whether VTest should be installed as well.'
-  use_lua:
-    required: false
-    default: 'false'
-    description: 'Compile with Lua support.'
-  use_openssl:
-    required: false
-    default: 'false'
-    description: 'Compile with SSL support.'
+    description: 'VTest branch to install.'
 outputs:
-  version:
-    description: 'The exact HAProxy version that was installed.'
+  commit:
+    description: 'The exact VTest commit that was installed.'
 runs:
   using: 'node16'
   main: 'dist/index.js'
