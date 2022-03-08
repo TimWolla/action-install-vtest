@@ -5,6 +5,9 @@ inputs:
   branch:
     required: true
     description: 'VTest branch to install.'
+  GITHUB_TOKEN:
+    required: true
+    description: 'The value of secrets.GITHUB_TOKEN.'
 outputs:
   commit:
     description: 'The exact VTest commit that was installed.'
