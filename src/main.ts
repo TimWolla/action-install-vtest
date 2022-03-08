@@ -54,7 +54,7 @@ async function run(): Promise<void> {
 
     const restored = await cache.restoreCache(['VTest'], `vtest-${commit}`)
 
-    if (restored !== undefined) {
+    if (restored === undefined) {
       const vtest_tar_gz = await tc.downloadTool(
         `https://github.com/vtest/VTest/archive/${commit}.tar.gz`
       )
