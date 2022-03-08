@@ -23,6 +23,7 @@
 
 import * as cache from '@actions/cache'
 import * as core from '@actions/core'
+import * as os from 'os'
 import * as path from 'path'
 import * as tc from '@actions/tool-cache'
 import {Octokit} from '@octokit/action'
@@ -53,7 +54,9 @@ async function run(): Promise<void> {
       commit = branch
     }
 
-    const restored = await cache.restoreCache(['VTest'], `vtest-${commit}`)
+    const cache_key = `vtest-${commit}-${os.type()}-${os.arch()}`
+
+    const restored = await cache.restoreCache(['VTest'], cache_key)
 
     if (restored === undefined) {
       const vtest_tar_gz = await tc.downloadTool(
@@ -66,7 +69,7 @@ async function run(): Promise<void> {
       await exec('make', ['-C', vtest_path, 'FLAGS=-O2 -s -Wall'])
 
       try {
-        await cache.saveCache(['VTest'], `vtest-${commit}`)
+        await cache.saveCache(['VTest'], cache_key)
       } catch (error) {
         if (error instanceof Error) {
           core.error(`Failed to save the cache: ${error.message}`)
