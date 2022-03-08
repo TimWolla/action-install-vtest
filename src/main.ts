@@ -60,7 +60,8 @@ async function run(): Promise<void> {
     ])
     await exec('make', ['-C', vtest_path, 'FLAGS=-O2 -s -Wall'])
 
-    core.addPath(vtest_path)
+    const cachedPath = await tc.cacheDir(vtest_path, 'vtest', commit)
+    core.addPath(cachedPath)
 
     core.setOutput('commit', commit)
   } catch (error) {
