@@ -23,6 +23,7 @@
 
 import * as cache from '@actions/cache'
 import * as core from '@actions/core'
+import * as path from 'path'
 import * as tc from '@actions/tool-cache'
 import {Octokit} from '@octokit/action'
 import {exec} from '@actions/exec'
@@ -76,8 +77,10 @@ async function run(): Promise<void> {
     }
 
     core.addPath('VTest')
-
     core.setOutput('commit', commit)
+
+    const matchersPath = path.join(__dirname, '../..', '.github')
+    core.info(`##[add-matcher]${path.join(matchersPath, 'vtest.json')}`)
   } catch (error) {
     if (error instanceof Error) {
       core.setFailed(error.message)
