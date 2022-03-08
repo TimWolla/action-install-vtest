@@ -16,9 +16,12 @@ jobs:
       - run: |
           npm run all
   test: # make sure the action works on a clean machine without building
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os:
+        - ubuntu-latest
+        - macos-latest
         vtest-versions:
         - "b9a88f92777d97e42d908b4919f305889200f52c"
         - "master"
