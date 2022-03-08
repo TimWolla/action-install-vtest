@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 
+import * as cache from '@actions/cache'
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import {Octokit} from '@octokit/action'
@@ -51,22 +52,22 @@ async function run(): Promise<void> {
       commit = branch
     }
 
-    let cachedPath = tc.find('vtest', commit)
+    const restored = await cache.restoreCache(['VTest'], `vtest-${commit}`)
 
-    if (cachedPath === '') {
+    if (restored !== undefined) {
       const vtest_tar_gz = await tc.downloadTool(
         `https://github.com/vtest/VTest/archive/${commit}.tar.gz`
       )
-      const vtest_path = await tc.extractTar(vtest_tar_gz, undefined, [
+      const vtest_path = await tc.extractTar(vtest_tar_gz, 'VTest', [
         'xv',
         '--strip-components=1'
       ])
       await exec('make', ['-C', vtest_path, 'FLAGS=-O2 -s -Wall'])
 
-      cachedPath = await tc.cacheDir(vtest_path, 'vtest', commit)
+      await cache.saveCache(['VTest'], `vtest-${commit}`)
     }
 
-    core.addPath(cachedPath)
+    core.addPath('VTest')
 
     core.setOutput('commit', commit)
   } catch (error) {
