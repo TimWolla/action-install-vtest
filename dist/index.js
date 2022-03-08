@@ -84,13 +84,16 @@ function run() {
             else {
                 commit = branch;
             }
-            const vtest_tar_gz = yield tc.downloadTool(`https://github.com/vtest/VTest/archive/${commit}.tar.gz`);
-            const vtest_path = yield tc.extractTar(vtest_tar_gz, undefined, [
-                'xv',
-                '--strip-components=1'
-            ]);
-            yield (0, exec_1.exec)('make', ['-C', vtest_path, 'FLAGS=-O2 -s -Wall']);
-            const cachedPath = yield tc.cacheDir(vtest_path, 'vtest', commit);
+            let cachedPath = tc.find('vtest', commit);
+            if (cachedPath === '') {
+                const vtest_tar_gz = yield tc.downloadTool(`https://github.com/vtest/VTest/archive/${commit}.tar.gz`);
+                const vtest_path = yield tc.extractTar(vtest_tar_gz, undefined, [
+                    'xv',
+                    '--strip-components=1'
+                ]);
+                yield (0, exec_1.exec)('make', ['-C', vtest_path, 'FLAGS=-O2 -s -Wall']);
+                cachedPath = yield tc.cacheDir(vtest_path, 'vtest', commit);
+            }
             core.addPath(cachedPath);
             core.setOutput('commit', commit);
         }
