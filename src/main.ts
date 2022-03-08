@@ -56,6 +56,8 @@ async function run(): Promise<void> {
 
     const cache_key = `vtest-${commit}-${os.type()}-${os.arch()}`
 
+    core.info(`Using cache key '${cache_key}'`)
+
     const restored = await cache.restoreCache(['VTest'], cache_key)
 
     if (restored === undefined) {
