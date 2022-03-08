@@ -30,3 +30,5 @@ jobs:
           branch: ${{ matrix.vtest-versions }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: echo "Installed VTest ${{ steps.install-vtest.outputs.commit }}."
+      - run: which vtest
+      - run: ./vtest 2>&1 |grep '^usage'
