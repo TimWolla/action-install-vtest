@@ -64,7 +64,15 @@ async function run(): Promise<void> {
       ])
       await exec('make', ['-C', vtest_path, 'FLAGS=-O2 -s -Wall'])
 
-      await cache.saveCache(['VTest'], `vtest-${commit}`)
+      try {
+        await cache.saveCache(['VTest'], `vtest-${commit}`)
+      } catch (error) {
+        if (error instanceof Error) {
+          core.error(`Failed to save the cache: ${error.message}`)
+        } else {
+          throw error
+        }
+      }
     }
 
     core.addPath('VTest')
