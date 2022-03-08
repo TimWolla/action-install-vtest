@@ -82,7 +82,7 @@ async function run(): Promise<void> {
     core.addPath('VTest')
     core.setOutput('commit', commit)
 
-    const matchersPath = path.join(__dirname, '../..', '.github')
+    const matchersPath = path.join(__dirname, '..', '.github')
     core.info(`##[add-matcher]${path.join(matchersPath, 'vtest.json')}`)
   } catch (error) {
     if (error instanceof Error) {
